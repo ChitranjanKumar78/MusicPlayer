@@ -1,21 +1,31 @@
 package com.chitranjank.co.musicplayer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class Player extends AppCompatActivity {
     static MediaPlayer mediaPlayer = new MediaPlayer();
@@ -37,14 +47,22 @@ public class Player extends AppCompatActivity {
     ArrayList<Songs> arrayList;
     ArrayList<Integer> integerArrayList;
 
+    ListView listView;
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+        Toolbar toolbar = findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Play Songs");
+
         buttonPlay = findViewById(R.id.b_play);
         buttonNext = findViewById(R.id.b_next);
         buttonPrevious = findViewById(R.id.b_prev);
+        listView = findViewById(R.id.lv);
 
         repeat = findViewById(R.id.b_repreat);
         shuffle = findViewById(R.id.b_shuffle);
@@ -68,7 +86,7 @@ public class Player extends AppCompatActivity {
             buttonPlay.setBackgroundResource(R.drawable.pouse_b);
             seekBar.setMax(mediaPlayer.getDuration());
             setSeekBarUpdate();
-        }else {
+        } else {
             mediaPlayer.stop();
             mediaPlayer.reset();
             mediaPlayer = MediaPlayer.create(this, uri);
@@ -89,6 +107,22 @@ public class Player extends AppCompatActivity {
             integerArrayList.add(i);
             i++;
         }
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer.reset();
+                    previousPositon = position;
+                    playSongsByMediaplayer(previousPositon);
+                } else {
+                    previousPositon = position;
+                    playSongsByMediaplayer(previousPositon);
+                }
+
+            }
+        });
 
         buttonAssigning();
 
@@ -258,6 +292,7 @@ public class Player extends AppCompatActivity {
 
         return timerLable;
     }
+
     private void getSongsFromStorage() {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -271,5 +306,24 @@ public class Player extends AppCompatActivity {
             arrayList.add(new Songs(title, song));
         }
         cursor.close();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = new MenuInflater(this);
+        menuInflater.inflate(R.menu.player_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.show_songs) {
+            listView.setVisibility(View.VISIBLE);
+            MainActivity.SongsAdapter adapter = new MainActivity.SongsAdapter(arrayList);
+            listView.setAdapter(adapter);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

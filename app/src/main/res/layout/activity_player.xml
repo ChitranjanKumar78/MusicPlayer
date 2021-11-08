@@ -3,83 +3,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Player">
+    android:orientation="vertical"
+    tools:context=".Player"
+    android:background="@drawable/bck_image">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
         android:id="@+id/app_bar"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tool_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:textSize="20sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Music Player"
-                android:textStyle="bold" />
-        </androidx.appcompat.widget.Toolbar>
+            android:layout_height="wrap_content"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/t"
         android:layout_below="@id/app_bar"
+        android:background="@android:color/transparent"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/t"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_above="@id/s"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         android:ellipsize="marquee"
         android:gravity="center_horizontal"
         android:padding="10dp"
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="24sp" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/s"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_above="@id/l"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:weightSum="5">
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:padding="10dp"
-            />
+            android:layout_weight="1"
+            android:gravity="center" />
 
         <SeekBar
             android:id="@+id/seekBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@id/textView2"
-            android:layout_toLeftOf="@id/textView2"
-            android:layout_toEndOf="@id/textView"
-            android:layout_toRightOf="@id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:padding="10dp" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:padding="10dp" />
-    </RelativeLayout>
+            android:layout_weight="1"
+            android:gravity="center" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/l"
